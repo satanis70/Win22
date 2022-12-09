@@ -1,6 +1,7 @@
 package com.example.win22.adapters
 
 import android.content.DialogInterface.OnClickListener
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,14 +22,79 @@ class RecyclerAdapter(val list: List<BettingModel>, val onItemClickListener: OnI
         private val textViewStatus = itemView.findViewById<TextView>(R.id.textView_status)
         private val buttonWin = itemView.findViewById<AppCompatImageButton>(R.id.button_win)
         private val buttonLoss = itemView.findViewById<AppCompatImageButton>(R.id.button_loss)
-        private val buttonWait = itemView.findViewById<AppCompatImageButton>(R.id.button_wait)
         private val buttonDelete = itemView.findViewById<AppCompatImageButton>(R.id.button_delete)
-        fun bind(name: String, amount: String, odd: String, capital: String, status: String){
+        private val textViewWinSum = itemView.findViewById<TextView>(R.id.textView_win_sum)
+        fun bind(name: String, amount: String, odd: String, status: String, capital: String){
             textViewNameBet.text = name
             textViewSumBet.text = amount
             textViewStatus.text = status
+            when (status) {
+                "win" -> {
+                    textViewSumBet.setTextColor(itemView.resources.getColor(R.color.button_win))
+                    textViewWinSum.setTextColor(itemView.resources.getColor(R.color.button_win))
+                    textViewStatus.text = status
+                    buttonLoss.visibility = View.INVISIBLE
+                    buttonWin.visibility = View.INVISIBLE
+                    val result = odd.toDouble() * amount.toDouble()
+                    textViewWinSum.text = result.toString()
+                    textViewSumBet.text = amount
+                }
+                "loss" -> {
+                    textViewSumBet.setTextColor(itemView.resources.getColor(R.color.button_loss))
+                    textViewStatus.text = status
+                    buttonLoss.visibility = View.INVISIBLE
+                    buttonWin.visibility = View.INVISIBLE
+                    textViewWinSum.text = ""
+                    textViewSumBet.text = "-$amount"
+                }
+                else -> {
+                    textViewSumBet.setTextColor(itemView.resources.getColor(R.color.amount_wait))
+                }
+            }
             buttonWin.setOnClickListener{
-                onItemClickListener.onClick(adapterPosition, BettingModel(adapterPosition, name, odd, amount, status, capital), "win")
+                textViewSumBet.setTextColor(itemView.resources.getColor(R.color.button_win))
+                onItemClickListener.onClick(adapterPosition, BettingModel(
+                    adapterPosition,
+                    adapterPosition,
+                    name,
+                    odd,
+                    amount,
+                    status,
+                    capital),
+                    "win",
+                textViewStatus,
+                textViewWinSum)
+                buttonLoss.visibility = View.INVISIBLE
+                buttonWin.visibility = View.INVISIBLE
+            }
+            buttonLoss.setOnClickListener {
+                textViewSumBet.setTextColor(itemView.resources.getColor(R.color.button_loss))
+                onItemClickListener.onClick(adapterPosition, BettingModel(
+                    adapterPosition,
+                    adapterPosition,
+                    name,
+                    odd,
+                    amount,
+                    status,
+                    capital),
+                    "loss",
+                textViewStatus,
+                textViewWinSum)
+                buttonLoss.visibility = View.INVISIBLE
+                buttonWin.visibility = View.INVISIBLE
+            }
+            buttonDelete.setOnClickListener {
+                onItemClickListener.onClick(adapterPosition, BettingModel(
+                    adapterPosition,
+                    adapterPosition,
+                    name,
+                    odd,
+                    amount,
+                    status,
+                    capital),
+                    "delete",
+                    textViewStatus,
+                    textViewWinSum)
             }
         }
     }
@@ -39,7 +105,13 @@ class RecyclerAdapter(val list: List<BettingModel>, val onItemClickListener: OnI
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        holder.bind(list[position].name, list[position].amount, list[position].odd, list[position].capital, list[position].status)
+        holder.bind(
+            list[position].name,
+            list[position].amount,
+            list[position].odd,
+            list[position].status,
+            list[position].capital
+        )
     }
 
     override fun getItemCount(): Int {
@@ -47,6 +119,12 @@ class RecyclerAdapter(val list: List<BettingModel>, val onItemClickListener: OnI
     }
 
     interface OnItemClickListener {
-        fun onClick(position: Int, betModel: BettingModel, s: String) {}
+        fun onClick(
+            position: Int,
+            betModel: BettingModel,
+            s: String,
+            textViewStatus: TextView,
+            textViewWinSum: TextView
+        ) {}
     }
 }

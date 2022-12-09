@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey
 data class BettingModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int?,
+    @ColumnInfo(name = "position")
+    val position: Int,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "odd")

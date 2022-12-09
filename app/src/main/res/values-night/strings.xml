@@ -5,5 +5,8 @@
     <string name="odd_ex_2_75">Odd (ex:2.75)</string>
     <string name="amount">Amount</string>
     <string name="toast_empty">Fill in all the fields</string>
-    <string name="clear_the_bank">Clear the bank</string>
+    <string name="clear_the_bank">Clear the data</string>
+    <string name="balance">Balance:</string>
+    <string name="current_balance">Current balance:</string>
+    <string name="number_of_bets">Number of bets:</string>
 </resources>

@@ -10,5 +10,5 @@
     <color name="button_color">#D55E39</color>
     <color name="button_win">#81DC4F</color>
     <color name="button_loss">#FC3F3F</color>
-
+    <color name="amount_wait">#BAB4B4</color>
 </resources>

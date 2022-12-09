@@ -27,13 +27,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/button_color"
         android:clickable="true"
         android:src="@drawable/ic_baseline_add_24"
-        app:tint="@color/white"
-        android:backgroundTint="@color/button_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"></com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <TextView
         android:id="@+id/textView_capital"
@@ -43,7 +42,6 @@
         android:layout_marginTop="16dp"
         android:background="@color/button_color"
         android:gravity="center"
-        android:text="700€"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -54,7 +52,8 @@
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/floating_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_capital"></androidx.recyclerview.widget.RecyclerView>

@@ -20,4 +20,10 @@ interface BettingDao {
 
     @Query("DELETE FROM betting_table")
     suspend fun deleteDatabase()
+
+    @Query("UPDATE betting_table SET status=:status WHERE position LIKE:position")
+    suspend fun update(status: String, position: Int)
+
+    @Query("UPDATE betting_table SET capital=:capital WHERE position LIKE:position")
+    suspend fun updateCapital(capital:String, position: Int)
 }

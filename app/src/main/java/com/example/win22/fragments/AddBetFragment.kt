@@ -3,6 +3,7 @@ package com.example.win22.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
 import com.example.win22.MainActivity
 import com.example.win22.R
@@ -23,6 +25,7 @@ import kotlinx.coroutines.launch
 class AddBetFragment : DialogFragment() {
 
     private lateinit var betDatabase: BetDatabase
+    private var listBet = ArrayList<BettingModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,8 +49,10 @@ class AddBetFragment : DialogFragment() {
                 val odd = editTextOdd.text.toString()
                 val amount = editTextAmount.text.toString()
                 CoroutineScope(Dispatchers.IO).launch {
-                    betDatabase.bettingDao().insertData(BettingModel(null, name, odd, amount, "wait", getCapital()!!))
+                    listBet.addAll(betDatabase.bettingDao().getAllData())
+                    betDatabase.bettingDao().insertData(BettingModel(null,listBet.size,name, odd, amount, "wait", getCapital()!!))
                     launch(Dispatchers.Main){
+                        setCapital(getCapital()!!.toDouble()-amount.toDouble())
                         requireActivity().startActivity(Intent(context, MainActivity::class.java))
                     }
                 }
@@ -56,8 +61,18 @@ class AddBetFragment : DialogFragment() {
 
     }
     private fun getCapital(): String? {
-        val sharedPrefBankroll =
+        val sharedPrefCapital =
             requireContext().getSharedPreferences("capital", Context.MODE_PRIVATE)
-        return sharedPrefBankroll.getString("capital", "")
+        sharedPrefCapital.getString("capital", "")?.let { Log.i("CAPITAL", it) }
+        return sharedPrefCapital.getString("capital", "")
     }
+
+    private fun setCapital(capital: Double) {
+        val sharedPrefCapital =
+            requireContext().getSharedPreferences("capital", Context.MODE_PRIVATE)
+        sharedPrefCapital.edit {
+            putString("capital", capital.toString())
+        }
+    }
+
 }

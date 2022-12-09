@@ -8,11 +8,16 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.win22.adapters.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.onesignal.OneSignal
 
 class MainActivity : AppCompatActivity() {
+    private val APP_ID = "714b9f14-381d-4fc4-a93c-28d480557381"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
+        OneSignal.initWithContext(this)
+        OneSignal.setAppId(APP_ID)
         val constraintLayout = findViewById<ConstraintLayout>(R.id.constraint_main_activity)
         GetBackgroundImage.setImage(constraintLayout, this)
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
@@ -32,5 +37,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.attach()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }
